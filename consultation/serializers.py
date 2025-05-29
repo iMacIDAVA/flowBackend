@@ -48,3 +48,11 @@ class SubmitFormSerializer(serializers.Serializer):
         if not MedicalQuestionnaire.objects.filter(id=value).exists():
             raise serializers.ValidationError("Questionnaire with this ID does not exist")
         return value 
+
+
+
+
+class MedicalQuestionnaireSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedicalQuestionnaire
+        fields = '__all__'  # Include all fields from MedicalQuestionnaire

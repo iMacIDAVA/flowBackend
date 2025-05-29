@@ -3,7 +3,7 @@ from .models import MedicalQuestionnaire, VideoCallPipeline
 
 @admin.register(VideoCallPipeline)
 class VideoCallPipelineAdmin(admin.ModelAdmin):
-    list_display = ('id', 'patient_id', 'doctor_id', 'session_type', 'status', 'created_at', 'updated_at')
+    list_display = ('id', 'patient_id', 'doctor_id', 'session_type', 'status', 'amount', 'created_at', 'updated_at')
     list_filter = ('status', 'session_type', 'created_at')
     search_fields = ('patient_id', 'doctor_id', 'channel_name')
     readonly_fields = ('created_at', 'updated_at', 'payment_completed_at', 'form_submitted_at', 'call_started_at', 'call_ended_at')
@@ -11,7 +11,7 @@ class VideoCallPipelineAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('patient_id', 'doctor_id', 'channel_name', 'session_type', 'status')
+            'fields': ('patient_id', 'doctor_id', 'channel_name', 'session_type', 'status', 'amount')
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at', 'payment_completed_at', 'form_submitted_at', 'call_started_at', 'call_ended_at'),

@@ -23,7 +23,7 @@ class MedicalQuestionnaire(models.Model):
     nas_infundat = models.BooleanField(default=False)
     rinoree = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-
+#can you make me endpoint that it will recive MedicalQuestionnaire and after checking 
 class VideoCallPipeline(models.Model):
     class PipelineStatus(models.TextChoices):
         REQUESTED = 'Requested'
@@ -47,6 +47,7 @@ class VideoCallPipeline(models.Model):
     channel_name = models.CharField(max_length=100)
     session_type = models.CharField(max_length=20, choices=SessionType.choices)
     status = models.CharField(max_length=20, choices=PipelineStatus.choices, default=PipelineStatus.REQUESTED)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     questionnaire = models.ForeignKey(MedicalQuestionnaire, null=True, blank=True, on_delete=models.SET_NULL)

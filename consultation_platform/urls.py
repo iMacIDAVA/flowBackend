@@ -21,7 +21,9 @@ from consultation.views import (
     ConsultationStatusView,  
     FormSubmissionView,
     CurrentConsultationView,
-    MedicalQuestionnaireCreateView
+    MedicalQuestionnaireCreateView,
+    CreateQuestionnaireAndLinkView , 
+    PipelineQuestionnaireView
 )
 
 urlpatterns = [
@@ -33,6 +35,9 @@ urlpatterns = [
     # Form Submission - This needs to be BEFORE the status update pattern
     path('api/consultation/<int:pk>/submit-form/', FormSubmissionView.as_view(), name='form-submission'),
     
+    # Create and Link Questionnaire
+    path('api/consultation/<int:session_id>/create-questionnaire/', CreateQuestionnaireAndLinkView.as_view(), name='create-questionnaire-and-link'),
+    
     # Consultation Status Updates
     path('api/consultation/<int:pk>/<str:action>/', ConsultationStatusView.as_view(), name='consultation-status'),
     
@@ -41,4 +46,5 @@ urlpatterns = [
     
     # Medical Questionnaire
     path('api/questionnaires/', MedicalQuestionnaireCreateView.as_view(), name='questionnaire-create'),
+    path('consultation/<int:session_id>/questionnaire/', PipelineQuestionnaireView.as_view(), name='pipeline-questionnaire'),
 ]
