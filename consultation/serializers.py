@@ -34,6 +34,15 @@ class RequestConsultationSerializer(serializers.Serializer):
             'invalid_choice': 'Session type must be one of: Call, Chat, Recommendation'
         }
     )
+    amount = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        required=True,
+        error_messages={
+            'required': 'Amount is required',
+            'invalid': 'Amount must be a valid decimal number'
+        }
+    )
 
 class SubmitFormSerializer(serializers.Serializer):
     questionnaire_id = serializers.IntegerField(

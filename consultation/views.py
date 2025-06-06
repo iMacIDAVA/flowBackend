@@ -53,6 +53,7 @@
 #             doctor_id=data['doctor_id'],
 #             channel_name=str(uuid.uuid4()),
 #             session_type=data['session_type'],
+#             amount=data['amount'],
 #             status=VideoCallPipeline.PipelineStatus.REQUESTED
 #         )
 
@@ -355,6 +356,24 @@ class ConsultationRequestView(APIView):
 
             data = serializer.validated_data
             
+            # Check if doctor has any active sessions
+            doctor_active_sessions = VideoCallPipeline.objects.filter(
+                doctor_id=data['doctor_id']
+            ).exclude(
+                status__in=[
+                    VideoCallPipeline.PipelineStatus.REJECTED,
+                    VideoCallPipeline.PipelineStatus.CALL_ENDED
+                ]
+            ).first()
+
+            if doctor_active_sessions:
+                return Response({
+                    'status': 'error',
+                    'message': 'Doctor is currently in an active consultation',
+                    'pipeline_id': doctor_active_sessions.id
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Check if patient has any active sessions with this doctor
             existing_pipeline = VideoCallPipeline.objects.filter(
                 patient_id=data['patient_id'],
                 doctor_id=data['doctor_id']
@@ -377,6 +396,7 @@ class ConsultationRequestView(APIView):
                 doctor_id=data['doctor_id'],
                 channel_name=str(uuid.uuid4()),
                 session_type=data['session_type'],
+                amount=data['amount'],
                 status=VideoCallPipeline.PipelineStatus.REQUESTED
             )
 
@@ -407,14 +427,15 @@ class ConsultationStatusView(APIView):
         valid_transitions = {
             VideoCallPipeline.PipelineStatus.REQUESTED: [
                 VideoCallPipeline.PipelineStatus.ACCEPTED,
-                VideoCallPipeline.PipelineStatus.REJECTED
+                VideoCallPipeline.PipelineStatus.REJECTED,
+
             ],
-            VideoCallPipeline.PipelineStatus.ACCEPTED: [VideoCallPipeline.PipelineStatus.PAYMENT_PENDING],
-            VideoCallPipeline.PipelineStatus.PAYMENT_PENDING: [VideoCallPipeline.PipelineStatus.PAYMENT_COMPLETED],
-            VideoCallPipeline.PipelineStatus.PAYMENT_COMPLETED: [VideoCallPipeline.PipelineStatus.FORM_PENDING],
-            VideoCallPipeline.PipelineStatus.FORM_PENDING: [VideoCallPipeline.PipelineStatus.FORM_SUBMITTED],
-            VideoCallPipeline.PipelineStatus.FORM_SUBMITTED: [VideoCallPipeline.PipelineStatus.CALL_READY],
-            VideoCallPipeline.PipelineStatus.CALL_READY: [VideoCallPipeline.PipelineStatus.CALL_STARTED],
+            VideoCallPipeline.PipelineStatus.ACCEPTED: [VideoCallPipeline.PipelineStatus.PAYMENT_PENDING , VideoCallPipeline.PipelineStatus.CALL_ENDED],
+            VideoCallPipeline.PipelineStatus.PAYMENT_PENDING: [VideoCallPipeline.PipelineStatus.PAYMENT_COMPLETED , VideoCallPipeline.PipelineStatus.CALL_ENDED],
+            VideoCallPipeline.PipelineStatus.PAYMENT_COMPLETED: [VideoCallPipeline.PipelineStatus.FORM_PENDING , VideoCallPipeline.PipelineStatus.CALL_ENDED],
+            VideoCallPipeline.PipelineStatus.FORM_PENDING: [VideoCallPipeline.PipelineStatus.FORM_SUBMITTED , VideoCallPipeline.PipelineStatus.CALL_ENDED],
+            VideoCallPipeline.PipelineStatus.FORM_SUBMITTED: [VideoCallPipeline.PipelineStatus.CALL_READY , VideoCallPipeline.PipelineStatus.CALL_ENDED],
+            VideoCallPipeline.PipelineStatus.CALL_READY: [VideoCallPipeline.PipelineStatus.CALL_STARTED , VideoCallPipeline.PipelineStatus.CALL_ENDED],
             VideoCallPipeline.PipelineStatus.CALL_STARTED: [VideoCallPipeline.PipelineStatus.CALL_ENDED],
         }
         
@@ -570,7 +591,11 @@ class CurrentConsultationView(APIView):
             pipeline = VideoCallPipeline.objects.filter(
                 **filter_kwargs
             ).exclude(
-                status=VideoCallPipeline.PipelineStatus.CALL_ENDED
+                    status__in=[
+                        VideoCallPipeline.PipelineStatus.CALL_ENDED,
+                        VideoCallPipeline.PipelineStatus.REJECTED
+                    ]
+                #status=VideoCallPipeline.PipelineStatus.CALL_ENDED
             ).order_by('-created_at').first()
 
             if not pipeline:
