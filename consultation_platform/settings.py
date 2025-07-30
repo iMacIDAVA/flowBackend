@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['10.0.2.2' , '127.0.0.1' , 'localhost' , '192.168.88.130']
 
+API_AUTH_TOKEN = "zu5QhYt6MdbjRakxWy6wzUpGs4yctl2LXd3bfK7uO9doBr5pzuqwuF7hGblxtVf2"
 
 # Application definition
 

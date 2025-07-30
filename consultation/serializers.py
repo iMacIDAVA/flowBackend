@@ -26,6 +26,18 @@ class RequestConsultationSerializer(serializers.Serializer):
             'invalid': 'Doctor ID must be a valid integer'
         }
     )
+    patient_name = serializers.CharField(
+        required=True,
+        error_messages={
+            'required': 'Patient name is required'
+        }
+    )
+    doctor_name = serializers.CharField(
+        required=True,
+        error_messages={
+            'required': 'Doctor name is required'
+        }
+    )
     session_type = serializers.ChoiceField(
         choices=VideoCallPipeline.SessionType.choices,
         required=True,

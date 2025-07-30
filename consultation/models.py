@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 class MedicalQuestionnaire(models.Model):
     nume_si_prenume_reprezentant_legal = models.CharField(max_length=255)
     nume_si_prenume = models.CharField(max_length=255)
-    data_nastere = models.DateField()
+    data_nastere = models.CharField(max_length=255)
     greutate = models.DecimalField(max_digits=5, decimal_places=2)
     alergic_la_vreun_medicament = models.BooleanField(default=False)
     la_ce_medicament_este_alergic = models.CharField(max_length=255, blank=True, null=True)
@@ -44,6 +44,8 @@ class VideoCallPipeline(models.Model):
 
     patient_id = models.IntegerField(default=0)
     doctor_id = models.IntegerField(default=0)
+    patient_name = models.CharField(max_length=255, default='')
+    doctor_name = models.CharField(max_length=255, default='')
     channel_name = models.CharField(max_length=100)
     session_type = models.CharField(max_length=20, choices=SessionType.choices)
     status = models.CharField(max_length=20, choices=PipelineStatus.choices, default=PipelineStatus.REQUESTED)
