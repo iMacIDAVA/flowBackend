@@ -4,10 +4,11 @@ from .settings import *
 DEBUG = False
 
 # Update ALLOWED_HOSTS with your Windows machine's IP or domain
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'your-windows-ip-here']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'your-windows-ip-here', '188.247.244.153', 'sosbebe-mobile.crmonline.ro']
 
 # Static files settings
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATIC_ROOT = '/root/flowBackend/staticfiles/'
 
 # Database settings (you can use SQLite for simplicity, or configure PostgreSQL/MySQL)
 DATABASES = {
