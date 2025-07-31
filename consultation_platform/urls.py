@@ -23,11 +23,13 @@ from consultation.views import (
     CurrentConsultationView,
     MedicalQuestionnaireCreateView,
     CreateQuestionnaireAndLinkView , 
-    PipelineQuestionnaireView
+    PipelineQuestionnaireView,
+    home
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home, name='home'),
     
     # Consultation Request
     path('api/consultation/request/', ConsultationRequestView.as_view(), name='consultation-request'),

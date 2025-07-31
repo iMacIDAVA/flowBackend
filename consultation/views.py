@@ -11,6 +11,7 @@ from .serializers import (
 from rest_framework.permissions import AllowAny
 import uuid
 from django.utils import timezone
+from django.http import HttpResponse
 
 class ConsultationRequestView(APIView):
     permission_classes = [AllowAny]
@@ -379,3 +380,6 @@ class PipelineQuestionnaireView(APIView):
                 'message': 'An unexpected error occurred',
                 'error': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def home(request):
+    return HttpResponse("home")
