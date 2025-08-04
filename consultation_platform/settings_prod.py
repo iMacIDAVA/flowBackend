@@ -6,14 +6,6 @@ DEBUG = False
 # Update ALLOWED_HOSTS with your Windows machine's IP or domain
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'your-windows-ip-here', '188.247.244.153', 'sosbebe-mobile.crmonline.ro']
 
-# CSRF Trusted Origins
-CSRF_TRUSTED_ORIGINS = [
-    'https://sosbebe-mobile.crmonline.ro',
-    'http://sosbebe-mobile.crmonline.ro',
-    'https://188.247.244.153',
-    'http://188.247.244.153',
-]
-
 # Static files settings
 STATIC_URL = '/static/'
 STATIC_ROOT = '/root/flowBackend/staticfiles/'
