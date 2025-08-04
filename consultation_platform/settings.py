@@ -53,6 +53,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://sosbebe-mobile.crmonline.ro',
+    'http://sosbebe-mobile.crmonline.ro',
+    'https://188.247.244.153',
+    'http://188.247.244.153',
+]
+
+
 ROOT_URLCONF = 'consultation_platform.urls'
 
 TEMPLATES = [
